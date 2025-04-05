@@ -27,6 +27,7 @@ This app uses a pre-trained mood classification model and multiple `NearestNeigh
 - `model_<mood>.pkl` – NearestNeighbors models for each mood
 - `MusicMoodFinal.parquet` – Optimized Spotify audio feature dataset
 - `requirements.txt` – Python dependencies
+- `input_scaler.pkl` - StandardScaler on input vector 
 
 ---
 
