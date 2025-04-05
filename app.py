@@ -4,6 +4,7 @@ import pandas as pd
 import joblib
 import tensorflow as tf
 
+
 @st.cache_resource
 def load_mood_model():
     return tf.keras.models.load_model('mood_decider_float32_CPU.keras')
@@ -21,7 +22,7 @@ def load_nn_models():
 
 nn_models = load_nn_models()
 
-@st.singleton
+
 def load_songs_df():
     return pd.read_parquet('MusicMoodFinal.parquet')
 
@@ -43,6 +44,7 @@ if st.button("Generate Playlist"):
     input_vector = np.array([[danceability, energy, speechiness, tempo, acoustic_intensity, mood_score]])
 
     proba = mood_model.predict(input_vector)[0]
+    print(proba)
     mood_labels = ['Calm','Energetic','Happy','Sad']
     top2_indices = np.argsort(proba)[::-1][:2]
     mood1, mood2 = [mood_labels[i] for i in top2_indices]
