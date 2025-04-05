@@ -4,14 +4,28 @@ import pandas as pd
 import joblib
 import tensorflow as tf
 
-mood_model = tf.keras.models.load_model('mood_decider_float32_CPU.keras')  
-nn_models = {
-    'Happy': joblib.load('model_happy.pkl'),
-    'Sad': joblib.load('model_sad.pkl'),
-    'Energetic': joblib.load('model_energetic.pkl'),
-    'Calm': joblib.load('model_calm.pkl')
-}
-songs_df = pd.read_parquet('MusicMoodFinal.parquet') 
+@st.cache_resource
+def load_mood_model():
+    return tf.keras.models.load_model('mood_decider_float32_CPU.keras')
+
+mood_model = load_mood_model()
+
+@st.cache_resource
+def load_nn_models():
+    return {
+        'Happy': joblib.load('model_happy.pkl'),
+        'Sad': joblib.load('model_sad.pkl'),
+        'Energetic': joblib.load('model_energetic.pkl'),
+        'Calm': joblib.load('model_calm.pkl')
+    }
+
+nn_models = load_nn_models()
+
+@st.cache_data
+def load_songs_df():
+    return pd.read_parquet('MusicMoodFinal.parquet')
+
+songs_df = load_songs_df()
 
 st.title("🎵 Mood-Based Playlist Generator")
 st.markdown("**Enter your song preferences below:**")
