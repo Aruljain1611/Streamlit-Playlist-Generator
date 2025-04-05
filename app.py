@@ -28,6 +28,7 @@ def load_scaler_model():
 
 scaler = load_scaler_model()
 
+@st.cache_resource
 def load_songs_df():
     return pd.read_parquet('MusicMoodFinal.parquet')
 
@@ -86,7 +87,7 @@ if st.button("Generate Playlist"):
 
     songs_1 = get_recommendations(mood1, num_mood1)
     songs_2 = get_recommendations(mood2, num_mood2)
-    songs_1.info()
+    print(songs_1.info())
 
     final_playlist = pd.concat([songs_1, songs_2], ignore_index=True)
 
