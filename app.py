@@ -21,7 +21,7 @@ def load_nn_models():
 
 nn_models = load_nn_models()
 
-@st.cache_data
+
 def load_songs_df():
     return pd.read_parquet('MusicMoodFinal.parquet')
 
