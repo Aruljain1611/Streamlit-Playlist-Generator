@@ -63,9 +63,25 @@ if st.button("Generate Playlist"):
 
     def get_recommendations(mood, count_mood):
         nn_model = nn_models[mood]
-        mood_songs = songs_df[songs_df['Mood'] == mood].reset_index(drop=True)
-        distances, indices = nn_model.kneighbors(input_vector, n_neighbors=min(count_mood, len(mood_songs)))
-        return mood_songs.iloc[indices[0]]
+        # mood_songs = songs_df[songs_df['Mood'] == mood].reset_index(drop=True)
+        # distances, indices = nn_model.kneighbors(input_vector, n_neighbors=min(count_mood, len(mood_songs)))
+
+        distance, indices = nn_model.kneighbors(input_vector, n_neighbors = count_mood)
+        song_rec_ids = sorted(list(zip(indices.squeeze().tolist(),distance.squeeze().tolist())),key=lambda x: x[1])[:0:-1]
+
+        cf_recs = []
+        for i in song_rec_ids:
+            song_name = songs_df.iloc[i[0]]['name']
+            artist_name = songs_df.iloc[i[0]]['artists']
+            cf_recs.append((song_name,artist_name))
+
+
+        ans = pd.DataFrame(cf_recs, index = range(1,count_mood))
+
+        # print(song_rec_ids)
+        return ans
+
+        # return mood_songs.iloc[indices[0]]
 
 
     songs_1 = get_recommendations(mood1, num_mood1)
@@ -75,5 +91,5 @@ if st.button("Generate Playlist"):
 
     st.subheader("🎧 Your Personalized Playlist")
     for i, row in final_playlist.iterrows():
-        st.write(f"{i+1}. **{row['name']}** — *{row['artists']}*")
+        st.write(f"{i+1}. **{row['0']}** — *{row['1']}*")
 
