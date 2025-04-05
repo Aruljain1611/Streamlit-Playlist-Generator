@@ -22,6 +22,11 @@ def load_nn_models():
 
 nn_models = load_nn_models()
 
+@st.cache_resource
+def load_scaler_model():
+    return joblib.load('input_scaler.pkl')
+
+scaler = load_scaler_model()
 
 def load_songs_df():
     return pd.read_parquet('MusicMoodFinal.parquet')
@@ -42,8 +47,8 @@ count = st.number_input("Number of Recommendations", min_value = 5, max_value = 
 
 if st.button("Generate Playlist"):
     input_vector = np.array([[danceability, energy, speechiness, tempo, acoustic_intensity, mood_score]])
-
-    proba = mood_model.predict(input_vector)[0]
+    input_vector_scaled = scaler.transform(input_vector)
+    proba = mood_model.predict(input_vector_scaled)[0]
     print(proba)
     mood_labels = ['Calm','Energetic','Happy','Sad']
     top2_indices = np.argsort(proba)[::-1][:2]
