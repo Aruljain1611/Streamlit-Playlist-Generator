@@ -68,7 +68,7 @@ if st.button("Generate Playlist"):
         # distances, indices = nn_model.kneighbors(input_vector, n_neighbors=min(count_mood, len(mood_songs)))
 
         distance, indices = nn_model.kneighbors(input_vector, n_neighbors = count_mood)
-        song_rec_ids = sorted(list(zip(indices.squeeze().tolist(),distance.squeeze().tolist())),key=lambda x: x[1])[:0:-1]
+        song_rec_ids = sorted(list(zip(indices.squeeze().tolist(), distance.squeeze().tolist())), key=lambda x: x[1])[:count_mood]
 
         cf_recs = []
         for i in song_rec_ids:
@@ -76,9 +76,8 @@ if st.button("Generate Playlist"):
             artist_name = songs_df.iloc[i[0]]['artists']
             cf_recs.append((song_name,artist_name))
 
-        print(len(cf_recs))
-        ans = pd.DataFrame(cf_recs, index = range(1,count_mood))
 
+        ans = pd.DataFrame(cf_recs, columns=["name", "artists"])
         # print(song_rec_ids)
         return ans
 
@@ -87,7 +86,6 @@ if st.button("Generate Playlist"):
 
     songs_1 = get_recommendations(mood1, num_mood1)
     songs_2 = get_recommendations(mood2, num_mood2)
-    print(songs_1.info())
 
     final_playlist = pd.concat([songs_1, songs_2], ignore_index=True)
 
