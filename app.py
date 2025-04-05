@@ -76,7 +76,7 @@ if st.button("Generate Playlist"):
             cf_recs.append((song_name,artist_name))
 
 
-        ans = pd.DataFrame(cf_recs, index = range(1,count_mood+1))
+        ans = pd.DataFrame(cf_recs, index = range(1,count_mood))
 
         # print(song_rec_ids)
         return ans
@@ -86,7 +86,7 @@ if st.button("Generate Playlist"):
 
     songs_1 = get_recommendations(mood1, num_mood1)
     songs_2 = get_recommendations(mood2, num_mood2)
-    songs_1.head()
+    songs_1.info()
 
     final_playlist = pd.concat([songs_1, songs_2], ignore_index=True)
 
