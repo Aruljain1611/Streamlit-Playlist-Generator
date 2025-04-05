@@ -76,7 +76,7 @@ if st.button("Generate Playlist"):
             artist_name = songs_df.iloc[i[0]]['artists']
             cf_recs.append((song_name,artist_name))
 
-        print(cf_recs)
+        print(len(cf_recs))
         ans = pd.DataFrame(cf_recs, index = range(1,count_mood))
 
         # print(song_rec_ids)
